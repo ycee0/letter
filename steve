@@ -1,0 +1,198 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport"	content="width=device-width, initial-scale=1"/>
+	<title> Letter for him </title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond&family=Pacifico&display=swap" rel="stylesheet">
+	<style>
+		body {
+			font-family: Tahoma, sans-serif;
+			text-align: center;
+			margin-top: 30px;
+			background-color: #76a388;
+			padding: 20px;
+			color: #76a388;
+			}
+			
+		.container {
+			max-width: 600px;
+			background: #b8e6ca;
+			border-radius: 20px;
+			box-shadow: 0 15px 30px rgba(210, 105, 135, 0.3);
+			padding: 40px 35px;
+			text-align: center;
+			position: relative;
+			}
+			
+		h1 {
+			font-family: 'Tahoma', sans-serif;
+			font-size: 2rem;
+			margin-bottom: 10px;
+			color: #0d0f0e;
+			text-shadow: 1px 1px 2px #81a2db;
+			}
+			
+		p {
+			font-family: 'Cormorant Garamond', serif;
+			font-size: 1.25rem;
+			line-height: 1;
+			margin: 10px 0;
+			white-space: pre-wrap;
+			color: #091b3b;
+			}
+			
+		button {
+			font-family: Tahoma, sans-serif;
+			background: #5a945a;
+			border: none;
+			padding: 15px 25px;
+			font-size: 1.1rem;
+			border-radius: 50px;
+			cursor: pointer;
+			box-shadow: 0 2px #5a945a;
+			transition: background-color 0.3s ease, transform 0.2s ease;
+			margin: 0 10px;
+			}
+			
+		button:hover {
+			background: #388238;
+			transform: scale(1.05);
+			}
+			
+		.hearts {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			top: 0; 
+			left: 0;
+			pointer-events: none;
+			overflow: visible;
+		}
+		
+		.heart {
+			position: absolute;
+			width: 20px;
+			height: 20px;
+			background: #7a0c17;
+			transform: rotate (45deg);
+			animation: floatUp linear forwards;
+			top: 0;
+			left: 0;
+			}
+			
+		.heart::before,
+		.heart::after {
+			content: "";
+			position: absolute;
+			width: 20px;
+			height: 20px;
+			background: #7a0c17;
+			border-radius: 50%;
+			}
+			
+		.heart::before {
+			top: -10px;
+			left: 0;
+			}
+		
+		.heart::after {
+			top: 0;
+			left: -10px;
+			}
+			
+		 @keyframes floatUp {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(1.5) rotate(45deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-150px) scale(1.5) rotate(45deg);
+      }
+    }
+	</style>
+   </head>
+   <body>
+		
+		<div class="container">
+			<h1> Letter for you! </h1>
+			<p id="letter"></p>
+			<button id="revealBtn"> Open me 💞 </button>
+			<div class="hearts" id="heartsContainer"></div>
+			</div>
+			
+	<audio id="bgMusic"loop>
+		<source src="balisong.mp3" type="audio/mpeg">
+	</audio>
+		
+	<script>
+		const loveLetter = `My Potatotev,
+
+Another month with you feels like a blessing, even if we may not be talking that much dahil sa situation mo right now. I know things are heavy and time isn't always on our side lately, but please know that my love and support for you haven't changed—if anything, they've grown stronger. 
+
+You’re carrying so much right now, and I wish I could ease that burden for you. Just remember, you don’t have to face everything alone. Lean on me, even if it’s just through a small message or a quiet presence. Your feelings matters to me more than anything.
+
+I want you to know that I am praying for you every day—for your strength, for peace in your heart, and for guidance through these challenging times. My prayers are a constant reminder that you are never alone, and that there is always hope even when things feel overwhelming.
+
+Even in silence, I feel close to you. Even in distance, I choose you. I’m proud of how you're holding on, and I’m here—patiently waiting, quietly cheering you on, and loving you in every way I can. 
+
+I believe in you, in us, and in the strength we have, to get through this together. We might not talk as much, but you’re always in my prayers, in my thoughts, and most of all, in my heart. I'll keep sending you all the love and prayers for you to keep moving forward. 
+
+Take care always, love. Happy Monthsary, I love you!`;
+		
+		const letterElement = document.getElementById('letter');
+		const revealBtn = document.getElementById('revealBtn')
+		const bgMusic = document.getElementById('bgMusic');
+		let index = 0;
+		let typingInterval;
+		let heartInterval;
+		
+		function typeLetter() {
+		if (index < loveLetter.length) {
+		letterElement.textContent += loveLetter.charAt(index);
+		index++;
+		} else {
+		clearInterval(typingInterval);
+		revealBtn.disabled = false;
+		revealBtn.textContent ='Read Again 🫶';
+		}
+	}
+		function createHeart() {
+		const heart = document.createElement('div');
+		heart.classList.add('heart');
+		heart.style.left = Math.random() *window.innerWidth + 'px';
+		heart.style.animationDuration = (2 + Math.random() * 2) + 's';
+		document.getElementById('heartsContainer').appendChild(heart);
+		setTimeout(() => heart.remove(), 4000);
+		}		
+		
+		function startHearts() {
+		heartInterval = setInterval(createHeart, 300);
+		}
+		
+		function stopHearts() {
+		clearInterval(heartInterval);
+		}
+		
+		function startTypingAndHearts() {
+		letterElement.textContent = '';
+		index = 0;
+		revealBtn.textContent ='💕';
+		revealBtn.disabled = true;
+		bgMusic.currentTime = 0;
+		bgMusic.play().catch(() => { /* autoplay might be blocked */ });
+		startHearts();
+		typingInterval = setInterval(() => {
+		typeLetter();
+		if (index === loveLetter.length) {
+		stopHearts();
+		}
+	}, 60);
+	}
+	
+		revealBtn.addEventListener('click', startTypingAndHearts);
+	</script>
+	
+</body>
+</html>
